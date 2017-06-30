@@ -2,7 +2,7 @@ import { Query } from '@angular/core';
 
 export default class ApplicationProperties {
     public static soundcloud_api_base = "https://api.soundcloud.com";
-    public static soundcloud_client_key = "2t9loNQH90kzJcsFCODdigxfp325aq4z";
+    public static soundcloud_client_key = "";
 
     public static searchUrl(query: string, offset: number): string {
         query = encodeURI(query);

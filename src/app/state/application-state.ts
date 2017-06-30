@@ -9,6 +9,10 @@ export class ApplicationState {
     constructor() { }
 
     public songsList(): Observable<SongMetadata[]> {
-        
+        return Observable.empty();
+    }
+
+    public currentlyPlaying(): Observable<SongMetadata> {
+        return Observable.empty();
     }
 }
