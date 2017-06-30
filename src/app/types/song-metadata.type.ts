@@ -7,4 +7,9 @@ export interface SongMetadata {
     genre: string;
     title: string;
     stream_url: string;
+    user: Artist;
+}
+
+export interface Artist {
+    username: string;
 }
