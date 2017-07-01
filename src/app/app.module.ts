@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { EventsService } from './services/events.service';
 import { PlayerService } from './services/player.service';
 import { SoundcloudService } from './services/soundcloud.service';
+import { WebApiService } from './services/webapi.service';
 import { Http, HttpModule } from "@angular/http";
 
 @NgModule({
@@ -29,6 +30,7 @@ import { Http, HttpModule } from "@angular/http";
   providers: [
     StatusBar,
     SplashScreen,
+    WebApiService,
     SoundcloudService,
     PlayerService,
     EventsService,

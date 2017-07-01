@@ -53,8 +53,9 @@ export class PlayerService {
                 case LbmEventType.PLAYER_RESUME:
                     this.audio.play();
                     return;
-                case LbmEventType.SONG_END:
                 case LbmEventType.PLAYER_NEXT:
+                    this.songSkipped();
+                case LbmEventType.SONG_END:
                     this.playNext();
                     return;
             }
@@ -83,6 +84,10 @@ export class PlayerService {
 
     private updatePlayerState(playerState: any) {
         this.playerStates.next(Object.assign(this.playerState, playerState));
+    }
+
+    private songSkipped() {
+        this.events.emit({type: LbmEventType.SONG_SKIP, data: this.playerState.currentSong});
     }
 
     private playNext() {

@@ -1,8 +1,5 @@
-export class Vote {
-    constructor(
-        public id: string,
-        public rating: number,
-        public location: {lon: number, lat: number},
-        public time: number
-    ) {}
+export interface Vote {
+    song_id: string,
+    rating: number,
+    location: { lon: number, lat: number }
 }

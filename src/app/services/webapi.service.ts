@@ -5,7 +5,8 @@ import { SongMetadata } from '../types/song-metadata.type';
 import { Vote } from '../types/vote.type';
 import { EventsService } from './events.service';
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
+import { ContentType } from '@angular/http/src/enums';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
@@ -26,39 +27,50 @@ export class WebApiService {
             switch (event.type) {
                 case LbmEventType.SONG_UPVOTE:
                 case LbmEventType.SONG_END:
-                    this.publishUpvote(event.data);
+                    this.voteWithLocation(event.data, +1);
                     return;
-                case LbmEventType.PLAYER_NEXT:
+                case LbmEventType.SONG_SKIP:
                 case LbmEventType.SONG_DOWNVOTE:
-                    this.publishDownvote(event.data);
+                    this.voteWithLocation(event.data, -1);
                     return;
             }
         });
     }
 
-    public publishUpvote(song: SongMetadata) {
-        // navigator.geolocation.getCurrentPosition(position => {
-        //     let location = {
-        //         position.coords.longitude,
-        //         position.coords.latitude
-        //     };
-            
-        //     this.vote(new Vote(
-        //         song.id,
-        //         1,
-        //         { lon }
-        //     ))
-        // });
+    public voteWithLocation(song: SongMetadata, rating: number) {
+        navigator.geolocation.getCurrentPosition(position => {
+            let location = {
+                lon: position.coords.longitude,
+                lat: position.coords.latitude
+            };
+
+            this.vote({
+                song_id: song.id,
+                location: location,
+                rating: rating
+            });
+        });
     }
 
-    public publishDownvote(song: SongMetadata) {
+    vote(vote: Vote): Observable<Response> {
+        let url = this.baseUrl + '/post/vote';
 
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json; charset=utf-8');
+
+        let request = this.http.post(
+            url,
+            vote,
+            { headers: headers }
+        )
+
+        request.subscribe(
+            response => console.log(response),
+            err => console.log(err)
+        );
+
+        return request;
     }
-
-    // vote(vote: Vote): Observable<Response> {
-    //     console.log(vote);
-    //     return this.http.post(this.baseUrl + 'post/vote/', vote, this.postHeaders).catch(this.handleError);
-    // }
 
     // locationSongs(location: { lon: number, lat: number }): Observable<LocationSongs> {
     //     let lon = number.toString(location.lon)
