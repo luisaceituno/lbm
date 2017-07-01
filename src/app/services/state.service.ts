@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class ApplicationState {
+export class StateService {
 
-    constructor() { }
+    constructor() {}
 
     public songsList(): Observable<SongMetadata[]> {
         return Observable.empty();

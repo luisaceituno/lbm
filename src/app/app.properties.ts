@@ -1,4 +1,3 @@
-import { Query } from '@angular/core';
 
 export default class ApplicationProperties {
     public static soundcloud_api_base = "https://api.soundcloud.com";

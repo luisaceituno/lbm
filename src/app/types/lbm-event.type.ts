@@ -9,6 +9,7 @@ export enum LbmEventType {
     PLAYER_RESUME,
 
     SONG_PLAY,
+    SONG_END,
     SONG_UPVOTE,
     SONG_DOWNVOTE,
 
