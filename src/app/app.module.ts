@@ -6,8 +6,10 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import {SoundcloudService} from "./services/soundcloud.service";
-import {Http, HttpModule} from "@angular/http";
+import { EventsService } from './services/events.service';
+import { PlayerService } from './services/player.service';
+import { SoundcloudService } from './services/soundcloud.service';
+import { Http, HttpModule } from "@angular/http";
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import {Http, HttpModule} from "@angular/http";
     StatusBar,
     SplashScreen,
     SoundcloudService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    PlayerService,
+    EventsService,
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule {}
+export class AppModule { }

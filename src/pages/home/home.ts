@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController, Platform, NavParams, ViewController, NavController } from 'ionic-angular';
-import {PlayerPage} from "../player/player";
-import {SongMetadata} from "../../app/types/song-metadata.type";
-import {SoundcloudService} from "../../app/services/soundcloud.service";
-import {noUndefined} from "@angular/compiler/src/util";
-import ApplicationProperties from "../../app/app.properties";
+import { Component } from '@angular/core';
+import { ModalController, NavController } from 'ionic-angular';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
+
+import { EventsService } from '../../app/services/events.service';
+import { PlayerService } from '../../app/services/player.service';
+import { SoundcloudService } from '../../app/services/soundcloud.service';
+import { PlayerState } from '../../app/state/player.state';
+import { PlaylistState } from '../../app/state/playlist.state';
+import { LbmEventType } from '../../app/types/lbm-event.type';
+import { SongMetadata } from '../../app/types/song-metadata.type';
+import { PlayerPage } from '../player/player';
 
 @Component({
   selector: 'page-home',
@@ -12,17 +17,40 @@ import ApplicationProperties from "../../app/app.properties";
 })
 export class HomePage {
 
-  private tracks : SongMetadata[] = [];
-  private currentTrack : SongMetadata;
-  private currentIndex : number = 0;
-  private audio : any;
+  private tracks: SongMetadata[] = [];
+  private currentTrack: SongMetadata;
+  private currentIndex: number = 0;
+  private audio: any;
 
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController, private scService : SoundcloudService) {
+  private playlistStates: Observable<PlaylistState>;
+  private playerStates: Observable<PlayerState>;
+  
+  private searchResults: BehaviorSubject<SongMetadata[]>;
+  private displayList: Observable<SongMetadata[]>;
 
+
+  constructor(
+    public navCtrl: NavController,
+    public modalCtrl: ModalController,
+    private scService: SoundcloudService,
+    private playerService: PlayerService,
+    private events: EventsService) {
   }
 
   ngOnInit() {
-    //this.scService.search('queen').forEach(x => this.tracks = x);
+      this.playlistStates = this.playerService.playlistStates;
+      this.playerStates = this.playerService.playerStates;
+      
+      this.searchResults = new BehaviorSubject([]);
+      this.displayList = this.playlistStates
+        .map(state => state.playlist)
+        .combineLatest(this.searchResults)
+        .map(([playlist, searchResults]) => {
+          if (searchResults && searchResults.length > 0) {
+            return searchResults;
+          }
+          return playlist;
+        })
   }
 
   openModal() {
@@ -30,41 +58,28 @@ export class HomePage {
     modal.present();
   }
 
-  playTrack(track: SongMetadata, index : number) {
-    this.currentTrack = track;
-    this.currentIndex = index;
-    if(this.audio)
-      this.audio.pause();
-    if(track && index <= this.tracks.length) {
-      this.audio = new Audio(ApplicationProperties.streamUrl(track.id.toString()));
-      this.audio.onended = () => {
-        this.playTrack(this.tracks[this.currentIndex + 1], this.currentIndex + 1)
-      };
-      this.audio.play();
-    }
+  playTrack(track: SongMetadata, index: number) {
+    this.events.emit({ type: LbmEventType.SONG_PLAY, data: track })
   }
 
   pauseTrack() {
-    if(this.audio)
-      this.audio.pause();
+    this.events.emit({ type: LbmEventType.PLAYER_PAUSE, data: {} });
   }
 
   resumeTrack() {
-    if(this.audio)
-      this.audio.play();
+    this.events.emit({ type: LbmEventType.PLAYER_RESUME, data: {} });
   }
 
   skipTrack() {
-    let index = this.tracks.indexOf(this.currentTrack);
-    index = index + 1;
-    this.playTrack(this.tracks[index], index);
+    this.events.emit({ type: LbmEventType.PLAYER_NEXT, data: {} });
   }
 
-  searchTracks(event : any) {
+  searchTracks(event: any) {
     let val = event.target.value;
     if (val && val.trim() != '') {
-      this.scService.search(val).forEach(x => {console.log(x); this.tracks = x;});
+      this.scService.search(val).forEach(searchResult => this.searchResults.next(searchResult));
+    } else {
+      this.searchResults.next([]);
     }
   }
-
 }

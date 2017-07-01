@@ -1,5 +1,5 @@
 export interface SongMetadata {
-    id: number;
+    id: string;
     artwork_url?: string;
     created_at: Date;
     description: string;

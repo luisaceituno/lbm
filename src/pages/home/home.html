@@ -10,19 +10,19 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngIf="tracks && tracks.length > 0">
-    <ion-item *ngFor="let track of tracks; let i = index" [attr.data-index]="i">
+  <ion-list>
+    <ion-item *ngFor="let track of (displayList | async)">
       <ion-thumbnail item-start>
         <img src="{{track.artwork_url}}">
       </ion-thumbnail>
-      <h2>{{i}}{{track.title}}</h2>
+      <h2>{{track.title}}</h2>
       <p>{{track.duration}} • {{track.user.username}}</p>
       <button ion-button clear item-end (click)="playTrack(track, i)">Play</button>
     </ion-item>
   </ion-list>
 </ion-content>
 
-<ion-footer *ngIf="currentTrack">
+<ion-footer *ngIf="(playerService.playerStates | async)?.currentSong">
   <ion-toolbar>
     <ion-buttons left>
       <button ion-button icon-only large>
@@ -30,7 +30,7 @@
       </button>
     </ion-buttons>
 
-    <ion-title>{{currentTrack.title}}</ion-title>
+    <ion-title>{{(playerService.playerStates | async)?.currentSong.title}}</ion-title>
 
     <ion-buttons right>
       <button (click)="pauseTrack()" ion-button icon-only large>
