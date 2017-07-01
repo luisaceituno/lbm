@@ -13,5 +13,7 @@ export enum LbmEventType {
     SONG_UPVOTE,
     SONG_DOWNVOTE,
 
+    PLAYLIST_UPDATE,
+
     LIST_REFRESH,
 }

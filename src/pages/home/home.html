@@ -10,14 +10,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let track of (displayList | async)">
+  <ion-list *ngIf="displayList | async as list">
+    <ion-item *ngFor="let track of list">
       <ion-thumbnail item-start>
         <img src="{{track.artwork_url}}">
       </ion-thumbnail>
       <h2>{{track.title}}</h2>
       <p>{{track.duration}} • {{track.user.username}}</p>
-      <button ion-button clear item-end (click)="playTrack(track, i)">Play</button>
+      <button ion-button clear item-end (click)="playTrack(track, list)">Play</button>
     </ion-item>
   </ion-list>
 </ion-content>

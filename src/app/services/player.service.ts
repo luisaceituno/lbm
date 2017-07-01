@@ -32,6 +32,9 @@ export class PlayerService {
     }
 
     private setUpEventHandling() {
+        this.playerStates.forEach(playerState => this.playerState = playerState);
+        this.playlistStates.forEach(playlistState => this.playlistState = playlistState);
+
         this.events.forEach(event => {
             switch(event.type) {
                 case LbmEventType.SONG_PLAY:
@@ -40,11 +43,17 @@ export class PlayerService {
                     this.audio.load();
                     this.audio.play();
                     return;
+                case LbmEventType.PLAYLIST_UPDATE:
+                    this.updatePlaylistState(Object.assign(this.playlistState, {playlist: event.data}));
+                    return;
                 case LbmEventType.PLAYER_PAUSE:
                     this.audio.pause();
                     return;
                 case LbmEventType.PLAYER_RESUME:
                     this.audio.play();
+                    return;
+                case LbmEventType.PLAYER_NEXT:
+                    this.playNext();
                     return;
             }
         });
@@ -67,12 +76,10 @@ export class PlayerService {
     }
 
     public updatePlaylistState(playlistState: PlaylistState) {
-        this.playlistState = playlistState;
         this.playlistStates.next(this.playlistState);
     }
 
     private updatePlayerState(playerState: PlayerState) {
-        this.playerState = playerState;
         this.playerStates.next(playerState);
     }
 }

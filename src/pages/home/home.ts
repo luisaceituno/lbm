@@ -58,8 +58,9 @@ export class HomePage {
     modal.present();
   }
 
-  playTrack(track: SongMetadata, index: number) {
+  playTrack(track: SongMetadata, playlist: SongMetadata[]) {
     this.events.emit({ type: LbmEventType.SONG_PLAY, data: track })
+    this.events.emit({ type: LbmEventType.PLAYLIST_UPDATE, data: playlist});
   }
 
   pauseTrack() {
