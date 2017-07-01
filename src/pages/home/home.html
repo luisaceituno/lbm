@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons left>
-      <button ion-button icon-left icon-only>
+      <button ion-button icon-left icon-only padding>
         <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
@@ -22,24 +22,24 @@
   </ion-list>
 </ion-content>
 
-<ion-footer *ngIf="(playerService.playerStates | async)?.currentSong">
-  <ion-toolbar>
-    <ion-buttons left>
+<ion-footer *ngIf="playerService.playerStates | async as state">
+  <ion-toolbar *ngIf="state.currentSong">
+    <ion-buttons (click)="openModal()"  left>
       <button ion-button icon-only large>
         <ion-icon name="arrow-dropup"></ion-icon>
       </button>
     </ion-buttons>
 
-    <ion-title>{{(playerService.playerStates | async)?.currentSong.title}}</ion-title>
+    <ion-title>{{state.currentSong.title}}</ion-title>
 
     <ion-buttons right>
-      <button (click)="pauseTrack()" ion-button icon-only large>
+      <button (click)="pauseTrack()" ion-button icon-only large color="primary" *ngIf="state.currentState == 'playing'" padding>
       <ion-icon name="pause"></ion-icon>
       </button>
-      <button (click)="resumeTrack()" ion-button icon-only large>
+      <button (click)="resumeTrack()" ion-button icon-only large color="primary" *ngIf="state.currentState == 'paused'" padding>
         <ion-icon name="play"></ion-icon>
       </button>
-      <button (click)="skipTrack()" ion-button icon-only large>
+      <button (click)="skipTrack()" ion-button icon-only large color="primary" padding>
         <ion-icon name="skip-forward"></ion-icon>
       </button>
     </ion-buttons>

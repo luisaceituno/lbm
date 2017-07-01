@@ -1,24 +1,41 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {NavController, NavParams, Platform, ViewController} from 'ionic-angular';
+import {PlayerService} from "../../app/services/player.service";
+import {SongMetadata} from "../../app/types/song-metadata.type";
+import {LbmEventType} from "../../app/types/lbm-event.type";
+import {EventsService} from "../../app/services/events.service";
 
-/**
- * Generated class for the PlayerPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-@IonicPage()
 @Component({
-  selector: 'page-player',
   templateUrl: 'player.html',
 })
 export class PlayerPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    private params: NavParams,
+    private viewCtrl: ViewController,
+    public playerService: PlayerService,
+    private events: EventsService
+  ) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PlayerPage');
+  playTrack(track: SongMetadata, playlist: SongMetadata[]) {
+    this.events.emit({ type: LbmEventType.SONG_PLAY, data: track })
+    this.events.emit({ type: LbmEventType.PLAYLIST_UPDATE, data: playlist});
   }
 
+  pauseTrack() {
+    this.events.emit({ type: LbmEventType.PLAYER_PAUSE, data: {} });
+  }
+
+  resumeTrack() {
+    this.events.emit({ type: LbmEventType.PLAYER_RESUME, data: {} });
+  }
+
+  skipTrack() {
+    this.events.emit({ type: LbmEventType.PLAYER_NEXT, data: {} });
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
 }

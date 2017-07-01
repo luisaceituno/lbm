@@ -11,11 +11,13 @@ import { PlayerService } from './services/player.service';
 import { SoundcloudService } from './services/soundcloud.service';
 import { WebApiService } from './services/webapi.service';
 import { Http, HttpModule } from "@angular/http";
+import {PlayerPage} from "../pages/player/player";
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    PlayerPage
   ],
   imports: [
     BrowserModule,
@@ -25,7 +27,8 @@ import { Http, HttpModule } from "@angular/http";
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    PlayerPage
   ],
   providers: [
     StatusBar,

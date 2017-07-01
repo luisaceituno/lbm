@@ -24,7 +24,7 @@ export class HomePage {
 
   private playlistStates: Observable<PlaylistState>;
   private playerStates: Observable<PlayerState>;
-  
+
   private searchResults: BehaviorSubject<SongMetadata[]>;
   private displayList: Observable<SongMetadata[]>;
 
@@ -33,14 +33,14 @@ export class HomePage {
     public navCtrl: NavController,
     public modalCtrl: ModalController,
     private scService: SoundcloudService,
-    private playerService: PlayerService,
+    public playerService: PlayerService,
     private events: EventsService) {
   }
 
   ngOnInit() {
       this.playlistStates = this.playerService.playlistStates;
       this.playerStates = this.playerService.playerStates;
-      
+
       this.searchResults = new BehaviorSubject([]);
       this.displayList = this.playlistStates
         .map(state => state.playlist)
@@ -54,7 +54,7 @@ export class HomePage {
   }
 
   openModal() {
-    let modal = this.modalCtrl.create(PlayerPage, this.currentTrack);
+    let modal = this.modalCtrl.create(PlayerPage);
     modal.present();
   }
 
