@@ -7,6 +7,7 @@ import { EventsService } from './events.service';
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/Rx';
+import _ from 'lodash';
 
 @Injectable()
 export class PlayerService {
@@ -38,8 +39,8 @@ export class PlayerService {
         this.events.forEach(event => {
             switch(event.type) {
                 case LbmEventType.SONG_PLAY:
-                    this.audio.src = ApplicationProperties.streamUrl((<SongMetadata> event.data).id);
                     this.updatePlayerState(Object.assign(this.playerState, {currentSong: event.data}));
+                    this.audio.src = ApplicationProperties.streamUrl((<SongMetadata> event.data).id);
                     this.audio.load();
                     this.audio.play();
                     return;
@@ -52,6 +53,7 @@ export class PlayerService {
                 case LbmEventType.PLAYER_RESUME:
                     this.audio.play();
                     return;
+                case LbmEventType.SONG_END:
                 case LbmEventType.PLAYER_NEXT:
                     this.playNext();
                     return;
@@ -81,5 +83,21 @@ export class PlayerService {
 
     private updatePlayerState(playerState: PlayerState) {
         this.playerStates.next(playerState);
+    }
+
+    private playNext() {
+        try {
+            let songId = this.playerState.currentSong.id;
+            let playlist = this.playlistState.playlist;
+            let playlistIndex = _.findIndex(playlist, {'id': songId});
+            if (playlist.length > playlistIndex) {
+                this.events.emit({type: LbmEventType.SONG_PLAY, data: playlist[playlistIndex + 1]});
+            }
+            else {
+                this.events.emit({type: LbmEventType.PLAYER_STOP, data: {}});
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 }

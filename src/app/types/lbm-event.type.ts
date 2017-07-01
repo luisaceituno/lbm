@@ -7,6 +7,7 @@ export enum LbmEventType {
     PLAYER_NEXT,
     PLAYER_PAUSE,
     PLAYER_RESUME,
+    PLAYER_STOP,
 
     SONG_PLAY,
     SONG_END,
