@@ -79,8 +79,8 @@ export class WebApiService {
     public refreshLocationSongs() {
         navigator.geolocation.getCurrentPosition(position => {
             let location = {
-                lon: position.coords.longitude,
-                lat: position.coords.latitude
+                lon: parseFloat(position.coords.longitude.toFixed(7)),
+                lat: parseFloat(position.coords.latitude.toFixed(7))
             };
 
             this.refreshSongsFor(location);
@@ -110,13 +110,15 @@ export class WebApiService {
         let playlist: SongMetadata[] = [];
 
         songs.forEach(song => {
+            console.log(song['song_id']);
             this.soundcloud.trackMetadata(song['song_id']).subscribe(metadata => {
                 metadata.rating = song.rating;
                 if (metadata.title.indexOf('Nazi') >= 0 || metadata.title.indexOf('nazi') >= 0) {
-                    console.log(song['song_id']);
+                    console.log('filtered:' + song['song_id']);
                     return;
                 }
                 playlist.push(metadata);
+                playlist.sort((s1, s2) => s2.rating - s1.rating);
                 this.events.emit({type: LbmEventType.PLAYLIST_UPDATE, data: _.sortBy(playlist, 'rating')});
             });
         })

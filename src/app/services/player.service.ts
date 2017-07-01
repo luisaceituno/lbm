@@ -48,6 +48,7 @@ export class PlayerService {
                     this.updatePlaylistState({playlist: event.data});
                     return;
                 case LbmEventType.PLAYER_PAUSE:
+                case LbmEventType.PLAYER_STOP:
                     this.audio.pause();
                     return;
                 case LbmEventType.PLAYER_RESUME:
@@ -99,6 +100,7 @@ export class PlayerService {
                 this.events.emit({type: LbmEventType.SONG_PLAY, data: playlist[playlistIndex + 1]});
             }
             else {
+                // this.playerStates.next({currentSong: undefined, currentState: 'paused', currentTime: 0});
                 this.events.emit({type: LbmEventType.PLAYER_STOP, data: {}});
             }
         } catch (err) {
