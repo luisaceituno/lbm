@@ -35,9 +35,13 @@ export class HomePage {
     this.currentIndex = index;
     if(this.audio)
       this.audio.pause();
-    this.audio = new Audio(ApplicationProperties.streamUrl(track.id.toString()));
-    this.audio.onended =  () => {this.playTrack(this.tracks[this.currentIndex + 1], this.currentIndex + 1)};
-    this.audio.play();
+    if(track && index <= this.tracks.length) {
+      this.audio = new Audio(ApplicationProperties.streamUrl(track.id.toString()));
+      this.audio.onended = () => {
+        this.playTrack(this.tracks[this.currentIndex + 1], this.currentIndex + 1)
+      };
+      this.audio.play();
+    }
   }
 
   pauseTrack() {
@@ -48,6 +52,12 @@ export class HomePage {
   resumeTrack() {
     if(this.audio)
       this.audio.play();
+  }
+
+  skipTrack() {
+    let index = this.tracks.indexOf(this.currentTrack);
+    index = index + 1;
+    this.playTrack(this.tracks[index], index);
   }
 
   searchTracks(event : any) {
