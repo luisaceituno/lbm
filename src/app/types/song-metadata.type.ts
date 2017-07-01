@@ -7,6 +7,7 @@ export interface SongMetadata {
     genre: string;
     title: string;
     stream_url: string;
+    upvoted: boolean;
     user: Artist;
 }
 

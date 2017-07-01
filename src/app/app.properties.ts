@@ -18,4 +18,7 @@ export default class ApplicationProperties {
         trackId = encodeURI(trackId);
         return `${this.soundcloud_api_base}/tracks/${trackId}?client_id=${this.soundcloud_client_key}`;
     }
+
+
+    public static webapi_url = "http://192.168.10.14:5000";
 }
