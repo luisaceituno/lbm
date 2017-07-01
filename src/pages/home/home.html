@@ -11,70 +11,14 @@
 
 <ion-content>
   <ion-list>
-    <ion-item>
+    <ion-item *ngFor="let track of tracks">
       <ion-thumbnail item-start>
-        <img src="https://marketplace.canva.com/MAA_AaUyzc4/1/0/thumbnail_large/canva-two-tone-album-cd-cover-MAA_AaUyzc4.jpg">
+        <img src="{{track.artwork_url}}">
       </ion-thumbnail>
-      <h2>My Neighbor Totoro</h2>
-      <p>Hayao Miyazaki • 1988</p>
-      <button ion-button clear item-end>View</button>
+      <h2>{{track.title}}</h2>
+      <p>{{track.duration}} • {{track.created_at}}</p>
+      <button ion-button clear item-end (click)="playSong(track)">Play</button>
     </ion-item>
-    <ion-item>
-      <ion-thumbnail item-start>
-        <img src="https://marketplace.canva.com/MAA_AaUyzc4/1/0/thumbnail_large/canva-two-tone-album-cd-cover-MAA_AaUyzc4.jpg">
-      </ion-thumbnail>
-      <h2>My Neighbor Totoro</h2>
-      <p>Hayao Miyazaki • 1988</p>
-      <button ion-button clear item-end>View</button>
-    </ion-item>
-    <ion-item>
-      <ion-thumbnail item-start>
-        <img src="https://marketplace.canva.com/MAA_AaUyzc4/1/0/thumbnail_large/canva-two-tone-album-cd-cover-MAA_AaUyzc4.jpg">
-      </ion-thumbnail>
-      <h2>My Neighbor Totoro</h2>
-      <p>Hayao Miyazaki • 1988</p>
-      <button ion-button clear item-end>View</button>
-    </ion-item>
-    <ion-item>
-      <ion-thumbnail item-start>
-        <img src="https://marketplace.canva.com/MAA_AaUyzc4/1/0/thumbnail_large/canva-two-tone-album-cd-cover-MAA_AaUyzc4.jpg">
-      </ion-thumbnail>
-      <h2>My Neighbor Totoro</h2>
-      <p>Hayao Miyazaki • 1988</p>
-      <button ion-button clear item-end>View</button>
-    </ion-item>
-    <ion-item>
-      <ion-thumbnail item-start>
-        <img src="https://marketplace.canva.com/MAA_AaUyzc4/1/0/thumbnail_large/canva-two-tone-album-cd-cover-MAA_AaUyzc4.jpg">
-      </ion-thumbnail>
-      <h2>My Neighbor Totoro</h2>
-      <p>Hayao Miyazaki • 1988</p>
-      <button ion-button clear item-end>View</button>
-    </ion-item>
-    <ion-item>
-      <ion-thumbnail item-start>
-        <img src="https://marketplace.canva.com/MAA_AaUyzc4/1/0/thumbnail_large/canva-two-tone-album-cd-cover-MAA_AaUyzc4.jpg">
-      </ion-thumbnail>
-      <h2>My Neighbor Totoro</h2>
-      <p>Hayao Miyazaki • 1988</p>
-      <button ion-button clear item-end>View</button>
-    </ion-item>
-    <ion-item>
-      <ion-thumbnail item-start>
-        <img src="https://marketplace.canva.com/MAA_AaUyzc4/1/0/thumbnail_large/canva-two-tone-album-cd-cover-MAA_AaUyzc4.jpg">
-      </ion-thumbnail>
-      <h2>My Neighbor Totoro</h2>
-      <p>Hayao Miyazaki • 1988</p>
-      <button ion-button clear item-end>View</button>
-    </ion-item> <ion-item>
-    <ion-thumbnail item-start>
-      <img src="https://marketplace.canva.com/MAA_AaUyzc4/1/0/thumbnail_large/canva-two-tone-album-cd-cover-MAA_AaUyzc4.jpg">
-    </ion-thumbnail>
-    <h2>My Neighbor Totoro</h2>
-    <p>Hayao Miyazaki • 1988</p>
-    <button ion-button clear item-end>View</button>
-  </ion-item>
-
   </ion-list>
 </ion-content>
 

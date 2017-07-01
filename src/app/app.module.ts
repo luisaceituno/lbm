@@ -6,6 +6,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import {SoundcloudService} from "./services/soundcloud.service";
+import {Http, HttpModule} from "@angular/http";
 
 @NgModule({
   declarations: [
@@ -14,6 +16,7 @@ import { HomePage } from '../pages/home/home';
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -24,6 +27,7 @@ import { HomePage } from '../pages/home/home';
   providers: [
     StatusBar,
     SplashScreen,
+    SoundcloudService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

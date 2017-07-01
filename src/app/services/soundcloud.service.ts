@@ -4,6 +4,7 @@ import { SongMetadata } from '../types/song-metadata.type';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/Rx';
 
 @Injectable()
 export class SoundcloudService {
@@ -18,8 +19,9 @@ export class SoundcloudService {
         return this.http.get(url).map(response => response.json().collection);
     }
 
-    public songMetadata(id: string): Observable<SongMetadata> {
+    public trackMetadata(id: string): Observable<SongMetadata> {
         let url = ApplicationProperties.trackUrl(id);
         return this.http.get(url).map(response => response.json())
     }
 }
+
