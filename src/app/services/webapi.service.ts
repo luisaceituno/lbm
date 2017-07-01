@@ -2,12 +2,15 @@ import ApplicationProperties from '../app.properties';
 import { LbmEventType } from '../types/lbm-event.type';
 import { LocationSongs } from '../types/location-songs.type';
 import { SongMetadata } from '../types/song-metadata.type';
+import { SongRating } from '../types/song-rating.type';
 import { Vote } from '../types/vote.type';
 import { EventsService } from './events.service';
+import { SoundcloudService } from './soundcloud.service';
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { ContentType } from '@angular/http/src/enums';
 import { Observable } from 'rxjs/Observable';
+import _ from 'lodash';
 
 @Injectable()
 export class WebApiService {
@@ -18,8 +21,10 @@ export class WebApiService {
     constructor(
         private http: Http,
         private events: EventsService,
+        private soundcloud: SoundcloudService
     ) {
         this.setUpEventHandling();
+        this.refreshLocationSongs();
     }
 
     public setUpEventHandling() {
@@ -54,7 +59,6 @@ export class WebApiService {
 
     vote(vote: Vote): Observable<Response> {
         let url = this.baseUrl + '/post/vote';
-
         let headers = new Headers();
         headers.append('Content-Type', 'application/json; charset=utf-8');
 
@@ -70,6 +74,52 @@ export class WebApiService {
         );
 
         return request;
+    }
+
+    public refreshLocationSongs() {
+        navigator.geolocation.getCurrentPosition(position => {
+            let location = {
+                lon: position.coords.longitude,
+                lat: position.coords.latitude
+            };
+
+            this.refreshSongsFor(location);
+        });
+    }
+
+    public refreshSongsFor(location: {lon: number, lat: number}) {
+        let url = this.baseUrl + `/get/songlist/${location.lon}/${location.lat}`;
+        
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json; charset=utf-8');
+
+        let request = this.http.get(
+            url,
+            { headers: headers }
+        )
+
+        request.subscribe(
+            response => this.fetchMetadataFor(response.json().songs),
+            err => console.log(err)
+        );
+
+        return request;
+    }
+
+    public fetchMetadataFor(songs: SongRating[]) {
+        let playlist: SongMetadata[] = [];
+
+        songs.forEach(song => {
+            this.soundcloud.trackMetadata(song['song_id']).subscribe(metadata => {
+                metadata.rating = song.rating;
+                if (metadata.title.indexOf('Nazi') >= 0 || metadata.title.indexOf('nazi') >= 0) {
+                    console.log(song['song_id']);
+                    return;
+                }
+                playlist.push(metadata);
+                this.events.emit({type: LbmEventType.PLAYLIST_UPDATE, data: _.sortBy(playlist, 'rating')});
+            });
+        })
     }
 
     // locationSongs(location: { lon: number, lat: number }): Observable<LocationSongs> {
