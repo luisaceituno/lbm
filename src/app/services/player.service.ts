@@ -90,7 +90,7 @@ export class PlayerService {
             let songId = this.playerState.currentSong.id;
             let playlist = this.playlistState.playlist;
             let playlistIndex = _.findIndex(playlist, {'id': songId});
-            if (playlist.length > playlistIndex) {
+            if (playlist.length > playlistIndex + 1) {
                 this.events.emit({type: LbmEventType.SONG_PLAY, data: playlist[playlistIndex + 1]});
             }
             else {
