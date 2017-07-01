@@ -29,12 +29,22 @@ export class HomePage {
     modal.present();
   }
 
-  playSong(track: SongMetadata) {
+  playTrack(track: SongMetadata) {
     this.currentTrack = track;
     if(this.audio)
       this.audio.pause();
     this.audio = new Audio(ApplicationProperties.streamUrl(track.id.toString()));
     this.audio.play();
+  }
+
+  pauseTrack() {
+    if(this.audio)
+      this.audio.pause();
+  }
+
+  resumeTrack() {
+    if(this.audio)
+      this.audio.play();
   }
 
   searchTracks(event : any) {
