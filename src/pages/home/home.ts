@@ -3,6 +3,7 @@ import { ModalController, Platform, NavParams, ViewController, NavController } f
 import {PlayerPage} from "../player/player";
 import {SongMetadata} from "../../app/types/song-metadata.type";
 import {SoundcloudService} from "../../app/services/soundcloud.service";
+import {noUndefined} from "@angular/compiler/src/util";
 
 @Component({
   selector: 'page-home',
@@ -18,7 +19,7 @@ export class HomePage {
   }
 
   ngOnInit() {
-    this.scService.search('queen').forEach(x => this.tracks = x);
+    //this.scService.search('queen').forEach(x => this.tracks = x);
   }
 
   openModal() {
@@ -28,6 +29,13 @@ export class HomePage {
 
   playSong(track: SongMetadata) {
 
+  }
+
+  searchTracks(event : any) {
+    let val = event.target.value;
+    if (val && val.trim() != '') {
+      this.scService.search(val).forEach(x => {console.log(x); this.tracks = x;});
+    }
   }
 
 }

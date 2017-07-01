@@ -16,7 +16,7 @@ export class SoundcloudService {
 
     public search(query: string): Observable<SongMetadata[]> {
         let url = ApplicationProperties.searchUrl(query, 0);
-        return this.http.get(url).map(response => response.json().collection);
+        return this.http.get(url).map(response => response.json());
     }
 
     public trackMetadata(id: string): Observable<SongMetadata> {

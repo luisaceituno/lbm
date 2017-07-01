@@ -5,18 +5,18 @@
         <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-searchbar right></ion-searchbar>
+    <ion-searchbar (ionInput)="searchTracks($event)" right></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-list *ngIf="tracks && tracks.length > 0">
     <ion-item *ngFor="let track of tracks">
       <ion-thumbnail item-start>
         <img src="{{track.artwork_url}}">
       </ion-thumbnail>
       <h2>{{track.title}}</h2>
-      <p>{{track.duration}} • {{track.created_at}}</p>
+      <p>{{track.duration}} • {{track.user.username}}</p>
       <button ion-button clear item-end (click)="playSong(track)">Play</button>
     </ion-item>
   </ion-list>
