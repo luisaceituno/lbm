@@ -14,6 +14,7 @@ export class HomePage {
 
   private tracks : SongMetadata[] = [];
   private currentTrack : SongMetadata;
+  private currentIndex : number = 0;
   private audio : any;
 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, private scService : SoundcloudService) {
@@ -29,11 +30,13 @@ export class HomePage {
     modal.present();
   }
 
-  playTrack(track: SongMetadata) {
+  playTrack(track: SongMetadata, index : number) {
     this.currentTrack = track;
+    this.currentIndex = index;
     if(this.audio)
       this.audio.pause();
     this.audio = new Audio(ApplicationProperties.streamUrl(track.id.toString()));
+    this.audio.onended =  () => {this.playTrack(this.tracks[this.currentIndex + 1], this.currentIndex + 1)};
     this.audio.play();
   }
 
