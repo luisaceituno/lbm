@@ -7,7 +7,7 @@ export default class ApplicationProperties {
     public static searchUrl(query: string, offset: number): string {
         query = encodeURI(query);
         let offsetStr = encodeURI('' + offset);
-        return `https://api-v2.soundcloud.com/search?q=${query}&client_id=${this.soundcloud_client_key}&limit=10&offset=${offsetStr}`;
+        return `http://api.soundcloud.com/search/tracks?q=${query}&client_id=${this.soundcloud_client_key}&limit=10&offset=${offsetStr}`;
     }
 
     public static streamUrl(trackId: string): string {
