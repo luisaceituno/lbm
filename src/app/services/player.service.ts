@@ -39,13 +39,13 @@ export class PlayerService {
         this.events.forEach(event => {
             switch(event.type) {
                 case LbmEventType.SONG_PLAY:
-                    this.updatePlayerState(Object.assign(this.playerState, {currentSong: event.data}));
+                    this.updatePlayerState({currentSong: event.data});
                     this.audio.src = ApplicationProperties.streamUrl((<SongMetadata> event.data).id);
                     this.audio.load();
                     this.audio.play();
                     return;
                 case LbmEventType.PLAYLIST_UPDATE:
-                    this.updatePlaylistState(Object.assign(this.playlistState, {playlist: event.data}));
+                    this.updatePlaylistState({playlist: event.data});
                     return;
                 case LbmEventType.PLAYER_PAUSE:
                     this.audio.pause();
@@ -61,7 +61,7 @@ export class PlayerService {
         });
 
         this.audio.ontimeupdate = () => {
-            this.playerState.currentTime = this.audio.currentTime;
+            this.updatePlayerState({currentTime: this.audio.currentTime});
         }
 
         this.audio.onended = () => {
@@ -69,20 +69,20 @@ export class PlayerService {
         }
 
         this.audio.onpause = () => {
-            this.playerState.currentState = 'paused';
+            this.updatePlayerState({currentState: 'paused'});
         }
 
         this.audio.onplay = () => {
-            this.playerState.currentState = 'playing';
+            this.updatePlayerState({currentState: 'playing'});
         }
     }
 
-    public updatePlaylistState(playlistState: PlaylistState) {
-        this.playlistStates.next(this.playlistState);
+    public updatePlaylistState(playlistState: any) {
+        this.playlistStates.next(Object.assign(this.playlistState, playlistState));
     }
 
-    private updatePlayerState(playerState: PlayerState) {
-        this.playerStates.next(playerState);
+    private updatePlayerState(playerState: any) {
+        this.playerStates.next(Object.assign(this.playerState, playerState));
     }
 
     private playNext() {
