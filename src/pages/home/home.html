@@ -22,7 +22,7 @@
   </ion-list>
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="currentTrack">
   <ion-toolbar>
     <ion-buttons left>
       <button ion-button icon-only large>
@@ -30,7 +30,7 @@
       </button>
     </ion-buttons>
 
-    <ion-title>Aktueller Titel</ion-title>
+    <ion-title>{{currentTrack.title}}</ion-title>
 
     <ion-buttons right>
       <button ion-button icon-only large>

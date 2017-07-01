@@ -4,6 +4,7 @@ import {PlayerPage} from "../player/player";
 import {SongMetadata} from "../../app/types/song-metadata.type";
 import {SoundcloudService} from "../../app/services/soundcloud.service";
 import {noUndefined} from "@angular/compiler/src/util";
+import ApplicationProperties from "../../app/app.properties";
 
 @Component({
   selector: 'page-home',
@@ -13,6 +14,7 @@ export class HomePage {
 
   private tracks : SongMetadata[] = [];
   private currentTrack : SongMetadata;
+  private audio : any;
 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController, private scService : SoundcloudService) {
 
@@ -28,7 +30,11 @@ export class HomePage {
   }
 
   playSong(track: SongMetadata) {
-
+    this.currentTrack = track;
+    if(this.audio)
+      this.audio.pause();
+    this.audio = new Audio(ApplicationProperties.streamUrl(track.id.toString()));
+    this.audio.play();
   }
 
   searchTracks(event : any) {
