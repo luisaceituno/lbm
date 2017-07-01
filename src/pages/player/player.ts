@@ -35,6 +35,10 @@ export class PlayerPage {
     this.events.emit({ type: LbmEventType.PLAYER_NEXT, data: {} });
   }
 
+  upvote(track : SongMetadata) {
+    this.events.emit({ type: LbmEventType.SONG_UPVOTE, data: track });
+  }
+
   dismiss() {
     this.viewCtrl.dismiss();
   }

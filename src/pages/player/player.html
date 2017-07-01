@@ -34,7 +34,7 @@
       <ion-col>
         <div style="text-align: center">
           <ion-buttons>
-            <button ion-button icon-only small color="primary" padding>
+            <button (click)="upvote(state.currentSong)" ion-button icon-only small color="primary" padding>
               <ion-icon name="heart"></ion-icon>
             </button>
           </ion-buttons>
